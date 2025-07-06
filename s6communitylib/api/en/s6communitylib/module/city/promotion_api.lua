@@ -1,0 +1,25 @@
+--- Allows to change the promotion requirements.
+--- 
+--- Some technologies are now hidden in the next title rights list:
+--- <li>Technologies.R_Barracks</li>
+--- <li>Technologies.R_SwordSmith</li>
+--- <li>Technologies.R_BarracksArchers</li>
+--- <li>Technologies.R_BowMaker</li>
+---
+--- To replace the technologies for swordmen and archers, 2 new technologies
+--- were introduced. They can not be used to forbid features but to show the
+--- player that they can recruit those units with the next rank. So the old
+--- technologies do not need to be added to the rights. If the technologies
+--- are forbidden they will not be unlocked.
+---
+--- #### Technologies.R_MilitarySword
+--- This technology is to show the player they will be able to recruit swordmen.
+---
+--- Unlocks: Technologies.R_Barracks and Technologies.R_SwordSmith
+---
+--- #### Technologies.R_MilitaryBow
+--- This technology is to show the player they will be able to recruit archers.
+---
+--- Unlocks: Technologies.R_BarracksArchers and Technologies.R_BowMaker
+---
+

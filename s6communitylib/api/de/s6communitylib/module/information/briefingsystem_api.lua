@@ -1,0 +1,364 @@
+--- Ermöglicht das Definieren von Einleitungen.
+---
+--- Der Höhepunkt für das Skripten von Dialogen und einfachen Kameraanimationen.
+--- Ein vielseitiges Tool zum Skripten der Kartendarstellung.
+---
+
+
+
+--- Initialisiert den Builder für ein Briefing.
+--- 
+--- #### Functions `BriefingBuilder`:
+--- * `SetName(_Name)`:              Setzt den Namen des Briefings.
+--- * `SetPlayer(_Player)`:          Setzt den empfangenden Spieler des Briefings.
+--- * `UseBigBars(_Flag)`:           Verwendet die breiten Briefing Bars.
+--- * `UseRestoreCamera(_Flag)`:     Setzt die Kamera am Ende des Briefing zum Ausgang zurück.
+--- * `UseRestoreGameSpeed(_Flag)`:  Setzt die Spielgeschwindigkeit am Ende des Briefing zurück.
+--- * `UseGlobalImmortality(_Flag)`: Während des Briefings sind alle Entities unverwundbar.
+--- * `UseFarClipping(_Flag)`:       Verwendet ein weites Blickfeld. <b>Achtung</b>: Kann auf schwachen Systemen ruckeln.
+--- * `SetHideNotes(_Flag)`:         Versteckt das Notes Window wärhend des Briefing.
+--- * `SetEnableSky(_Flag)`:         Zeigt den Himmel während des Briefings an.
+--- * `SetEnableFoW(_Flag)`:         Zeigt den Nebel des Krieges während des Briefings an.
+--- * `SetEnableBorderPins(_Flag)`:  Zeigt die Grenzsteine während des Briefing an.
+--- * `SetOnBegin(_Function)`:       Funktion, die beim Start des Briefing ausgeführt wird.
+--- * `SetOnFinish(_Function)`:      Funktion, die beim Ende des Briefing ausgeführt wird.
+--- * `BeginPage()`:                 Eröffnet den `PageBuilder`.
+--- * `Redirect(_Target)`:           Springt zur Seite mit dem angegebenen Namen. Keine Angabe beendet das Briefing an dieser Stelle.
+--- * `Start()`:                     Startet das Briefing.
+--- 
+--- #### Functions `PageBuilder`:
+--- 
+--- Ein Briefing kann unbegrenzt viele Pages haben.
+--- * `SetName(_Name)`:            Setzt den Namen der Page.
+--- * `SetSpeech(_Speech)`:        Setzt den Pfad zur Voice Line.
+--- * `SetTitle(_Title)`:          Setzt den anzuzeigenden Titel der Page.
+--- * `SetText(_Text)`:            Setzt den anzuzeigenden Text der Page.
+--- * `SetDuration(_Duration)`:    Setzt die Anzeigedauer der Page.
+--- * `SetFadeIn(_Time)`:          Blendet von Schwarz ein.
+--- * `SetFadeOut(_Time)`:         Blendet zu Schwarz aus.
+--- * `SetFaderAlpha(_Opacity)`:   Setzt den Alphawert der Fadermaske.
+--- * `SetAction(_Action)`:        Funktion, die bei jedem Anzeigen der Seite ausgeführt wird.
+--- * `UseBigBars(_Flag)`:         Verwendet die breiten Briefing Bars auf dieser Seite.
+--- * `UsePerformanceMode(_Flag)`: Deaktiviert verschiedene Grafikeffekte um Performance zu verbessern.
+--- * `UseSkipping(_Flag)`:        Die Seite kann übersprungen werden.
+--- * `BeginCamera()`:             Eröffnet den `CameraBuilder`.
+--- * `BeginCameraAnimation()`:    Eröffnet den `CameraAnimationBuilder`.
+--- * `BeginParallaxAnimation()`:  Eröffnet den `ParallaxAnimationBuilder`.
+--- * `BeginChoice()`:             Eröffnet den `ChoiceBuilder`.
+--- * `EndPage()`:                 Beendet den `PageBuilder` und kehrt zum `BriefingBuilder` zurück.
+--- 
+--- #### Functions `CameraBuilder`:
+--- 
+--- * `UseCloseUp(_Flag)`:      Schaltet in die Nahsicht oder die Fernsicht.
+--- * `SetPosition(_Position)`: Setzt die Position der Kamera.
+--- * `SetAngle(_Angle)`:       Setzt den Höhenwinkel der Kamera.
+--- * `SetRotation(_Rotation)`: Setzt den Rotationswinkel der Kamera.
+--- * `SetZoom(_Zoom)`:         Setzt den Zoom der Kamera.
+--- * `BeginFlyTo()`:           Eröffnet den `FlyToBuilder`.
+--- * `EndCamera()`:            Beendet den `CameraBuilder` und kehrt zum `PageBuilder` zurück.
+--- 
+--- #### Functions `FlyToBuilder`:
+--- 
+--- * `SetPosition(_Position)`: Setzt die Position der Kamera.
+--- * `SetAngle(_Angle)`:       Setzt den Höhenwinkel der Kamera.
+--- * `SetRotation(_Rotation)`: Setzt den Rotationswinkel der Kamera.
+--- * `SetZoom(_Zoom)`:         Setzt den Zoom der Kamera.
+--- * `EndFlyTo()`:             Beendet den `FlyToBuilder` und kehrt zum `CameraBuilder` zurück.
+--- 
+--- #### Functions `ChoiceBuilder`:
+--- 
+--- * `Option(_ID?, _Text, _Target, _Condition?)`: Fügt eine neue Option hinzu. (Mit ? gekennzeichnete Parameter können weggelassen werden)
+--- * `EndChoice()`:                               Beendet den `ChoiceBuilder` und kehrt zum `PageBuilder` zurück.
+--- 
+--- #### Functions `CameraAnimationBuilder`:
+--- 
+--- * `SetRepeat(_Flag)`:          Die Animationen wiederholen sich nach ihrem Ende.
+--- * `SetClear(_Flag)`:           Alle laufenden Animationen werden aus der Queue entfernt.
+--- * `SetPostpone(_Flag)`:        Alle laufenden Animationen werden zurückgestellt.
+--- * `BeginAnimationSet()`:       Beginnt den `AnimationSetBuilder`.
+--- * `EndCameraAnimation()`:      Beendet den `CameraAnimationBuilder` und kehrt zum `PageBuilder` zurück.
+--- 
+--- #### Functions `AnimationSetBuilder`:
+--- 
+--- * `SetDuration(_Duration)`:                  Setzt die Dauer der Animation.
+--- * `SetLocal(_Flag)`:                         Die Animation ist an die Page gebunden.
+--- * `Animation(_px, _py, _pz, _lx, _ly, _lz)`: Koordinaten für Position und Blickziel der Kamera.
+--- * `EndAnimationSet()`:                       Beendet den `AnimationSetBuilder` und kehrt zum `CameraAnimationBuilder` zurück.
+--- 
+--- #### Functions `ParallaxAnimationBuilder`:
+--- 
+--- * `SetRepeat(_Flag)`:       Die Animationen wiederholen sich nach ihrem Ende.
+--- * `SetClear(_Flag)`:        Alle laufenden Animationen werden aus der Queue entfernt.
+--- * `SetPostpone(_Flag)`:     Alle laufenden Animationen werden zurückgestellt.
+--- * `BeginLayer()`:           Beginnt den `LayerBuilder`.
+--- * `EndParallaxAnimation()`: Beendet den `ParallaxAnimationBuilder` und kehrt zum `PageBuilder` zurück.
+--- 
+--- #### Functions `LayerBuilder`:
+--- 
+--- Es kann bis zu 6 verschiedene Layer geben.
+--- * `SetDuration(_Duration)`:            Setzt die Dauer der Animation.
+--- * `SetImage(_Image)`:                  Pfad zum angezeigten Bild.
+--- * `SetLocal(_Flag)`:                   Die Animation ist an die Page gebunden.
+--- * `Animation(_u0, _v0, _u1, _v1, _a)`: Koordinaten und Alphawert der angezeigten Teilgrafik (Koordinaten zwischen 0 und 1).
+--- * `EndLayer()`:                        Beendet den `LayerBuilder` und kehrt zum `ParallaxAnimationBuilder` zurück.
+--- 
+--- #### Example:
+--- Eine einfaches Briefing erzeugen, das die Dialogkamera benutzt.
+--- ```lua
+--- NewBriefing("TestBriefing", 1)
+---     :BeginPage()
+---         :SetTitle("Title")
+---         :SetText("This is a test page.")
+---         :BeginCamera()
+---             :SetPosition("Hakim")
+---             :UseCloseUp(true)
+---         :EndCamera()
+---     :EndPage()
+---     :Start();
+--- ```
+--- 
+--- #### Example:
+--- Eine einfaches Briefing erzeugen, das eine einfache Kamerabewegung macht.
+--- ```lua
+--- NewBriefing("TestBriefing", 1)
+---     :BeginPage()
+---         :SetTitle("Title")
+---         :SetText("This is a test page.")
+---         :BeginCamera()
+---             :SetPosition("Hakim")
+---             :SetRotation(90)
+---             :SetAngle(50)
+---             :SetZoom(3000)
+---             :BeginFlyTo()
+---                 :SetPosition("Saraya")
+---                 :SetRotation(-90)
+---                 :SetAngle(20)
+---                 :SetZoom(3000)
+---             :EndFlyTo()
+---         :EndCamera()
+---     :EndPage()
+---     :Start();
+--- ```
+--- 
+--- #### Example:
+--- Eine Briefing erzeugen, das komplexe Kameraanimationen nutzt. Die Funktion
+--- `Animation` kann mit direkten Koordinaten genutzt werden, oder hier die
+--- Koordinaten ermitteln. Die negative Zahl bedeutet eine direkte Höhenangabe.
+--- Eine positive Zahl wäre ein Offset zur Höhe der Entität.
+--- ```lua
+--- NewBriefing("TestBriefing", 1)
+---     :BeginPage()
+---         :SetTitle("Title")
+---         :SetText("This is a test page.")
+---         :BeginCameraAnimation()
+---             :SetClear(true)
+---             :BeginAnimationSet()
+---                 :SetDuration(30)
+---                 :SetLocal(true)
+---                 :Animation("Pos1", -2500, "npc1", -2200)
+---                 :Animation("Pos2", -2500, "npc1", -2000)
+---             :EndAnimationSet()
+---         :EndCameraAnimation()
+---     :EndPage()
+---     :Start();
+--- ```
+---  
+--- @param _Name string Name des Briefing
+--- @param _PlayerID integer Spieler-ID des Empfängers
+--- @return table BriefingBuilder Builder des Briefing
+function NewBriefing(_Name, _PlayerID)
+    return {};
+end
+API.NewBriefing = NewBriefing;
+
+--- Überprüft, ob eine Einleitung aktiv ist.
+--- @param _PlayerID integer Spieler-ID des Empfängers
+--- @return boolean IsActive Einleitung ist aktiv
+function IsBriefingActive(_PlayerID)
+    return true;
+end
+API.IsBriefingActive = IsBriefingActive;
+
+--- Startet eine Briefing.
+--- <p>
+--- <b>Achtung</b>: Diese Funktion ist veraltet und kann nur mit der
+--- deklarativen API benutzt werden.
+--- 
+--- #### Fields `_Briefing`:
+--- * `Starting`:                (optional) <b>function</b> Funktion, die beim Starten der Einleitung aufgerufen wird              
+--- * `Finished`:                (optional) <b>function</b> Funktion, die beim Beenden der Einleitung aufgerufen wird             
+--- * `RestoreCamera`:           (optional) <b>boolean</b> Kameraposition wird am Ende der Einleitung gespeichert und wiederhergestellt 
+--- * `RestoreGameSpeed`:        (optional) <b>boolean</b> Spielgeschwindigkeit wird am Ende der Einleitung gespeichert und wiederhergestellt      
+--- * `EnableGlobalImmortality`: (optional) <b>boolean</b> Während Einleitungen sind alle Entitäten unverwundbar        
+--- * `EnableSky`:               (optional) <b>boolean</b> Zeigt den Himmel während der Einleitung an                   
+--- * `EnableFoW`:               (optional) <b>boolean</b> Zeigt den Nebel des Krieges während der Einleitung an 
+--- * `EnableBorderPins`:        (optional) <b>boolean</b> Zeigt die Randnadeln während der Einleitung an     
+--- * `PreloadAssets`:           (optional) <b>boolean</b> Erlaubt weites Sichtfeld in Briefings
+--- * `HideNotes`:               (optional) <b>boolean</b> Nachrichten nicht anzeigen
+---
+--- #### Example:
+--- ```lua
+--- function Briefing1(_Name, _PlayerID)
+---     local Briefing = {};
+---     local AP, ASP = AddBriefingPages(Briefing);
+---     -- Seiten
+---     Briefing.Starting = function(_Data)
+---     end
+---     Briefing.Finished = function(_Data)
+---     end
+---     StartBriefing(Briefing, _Name, _PlayerID);
+--- end
+--- ```
+---
+--- @param _Briefing table   Einleitungstabelle
+--- @param _Name string      Name der Einleitung
+--- @param _PlayerID integer Spieler-ID des Empfängers
+function StartBriefing(_Briefing, _Name, _PlayerID)
+end
+API.StartBriefing = StartBriefing;
+
+--- Bereitet die Einleitung vor und gibt die Seitenfunktionen zurück.
+--- <p>
+--- <b>Achtung</b>: Diese Funktion ist veraltet und kann nur mit der
+--- deklarativen API benutzt werden.
+---
+--- Muss aufgerufen werden, bevor Seiten hinzugefügt werden.
+--- 
+--- @param _Briefing table Einleitungstabelle
+--- @return function AP  Funktion für Seiten
+--- @return function ASP Vereinfachte Funktion für Seiten
+function AddBriefingPages(_Briefing)
+    return function() end, function() end;
+end
+API.AddBriefingPages = AddBriefingPages;
+
+--- Erstellt eine Seite.
+--- <p>
+--- <b>Achtung</b>: Diese Funktion ist veraltet und kann nur mit der
+--- deklarativen API benutzt werden.
+---
+--- #### Fields `_Data`:
+--- * `Title`:           <b>any</b> Angezeigter Seitentitel (String oder Language Table)
+--- * `Text`:            <b>any</b> Angezeigter Seitentext (String oder Language Table)
+--- * `Speech`:          <b>string</b> Pfad zum Voiceover (MP3-Datei)
+--- * `Position`:        (Optional) <b>string</b> Skriptname der Position
+--- * `Duration`:        (Optional) <b>integer</b> Zeit bis zum automatischen Überspringen und Kameraanimation
+--- * `DialogCamera`:    (Optional) <b>boolean</b> Verwendung der Nahaufnahmekamera
+--- * `DisableSkipping`: (Optional) <b>boolean</b> Erlauben/Verbieten des Überspringens von Seiten
+--- * `Action`:          (Optional) <b>function</b> Funktion, die aufgerufen wird, wenn die Seite angezeigt wird
+--- * `FarClipPlane`:    (Optional) <b>integer</b> Renderabstand
+--- * `Rotation`:        (Optional) <b>float</b> Kamerarotation
+--- * `Zoom`:            (Optional) <b>float</b> Kamerazoom
+--- * `Angle`:           (Optional) <b>float</b> Kamerawinkel
+--- * `FadeIn`:          (Optional) <b>float</b> Dauer des Einblendens aus Schwarz
+--- * `FadeOut`:         (Optional) <b>float</b> Dauer des Ausblendens in Schwarz
+--- * `FaderAlpha`:      (Optional) <b>float</b> Maskenalpha
+--- * `BarOpacity`:      (Optional) <b>float</b> Deckkraft der Balken
+--- * `BigBars`:         (Optional) <b>boolean</b> Verwende große Balken
+--- * `FlyTo`:           (Optional) <b>table</b> Tabelle mit zweitem Satz von Kamerakonfigurationen, wobei die Kamera zufliegt
+--- * `Performance`:     (Optional) <b>boolean</b> Grafiksettings für diese Seite herabsetzen
+--- * `MC`:              (Optional) <b>table</b> Tabelle mit Auswahlmöglichkeiten zum Abzweigen in Dialogen
+--- 
+--- #### Fields `_Data.FlyTo`:
+--- * `Position`:     <b>string</b> Skriptname der Position
+--- * `Action`:       <b>function</b> Funktion, die aufgerufen wird, wenn die Seite angezeigt wird
+--- * `FarClipPlane`: <b>integer</b> Renderabstand
+--- * `Rotation`:     <b>float</b> Kamerarotation
+--- * `Zoom`:         <b>float</b> Kamerazoom
+--- * `Angle`:        <b>float</b> Kamerawinkel
+--- 
+--- #### Fields `_Data.MC`:
+--- * `[1]`: <b>any</b> Angezeigter Text (String oder Language Table)
+--- * `[2]`: <b>any</b> Sprungziel (String oder Funktion)
+---
+--- #### Example:
+--- Eine einfache Seite erstellen.
+--- ```lua
+--- AP {
+---    Title        = "Marcus",
+---    Text         = "Dies ist eine einfache Seite.",
+---    Position     = "Marcus",
+---    Rotation     = 30,
+---    DialogCamera = true,
+--- };
+--- ```
+---
+--- #### Example:
+--- Eine Multiple Choice Seite erstellen.
+--- ```lua
+--- AP {
+---    Title        = "Marcus",
+---    Text         = "Das ist keine so einfache Seite.",
+---    Position     = "Marcus",
+---    Rotation     = 30,
+---    DialogCamera = true,
+---    MC = {
+---        {"Option 1", "Option1"},
+---        {"Option 2", "Option2"},
+---    },
+--- };
+--- 
+--- -- Die Verzweigungen in einem Briefing müssen mit einer leeren Seite
+--- -- getrennt werden, damit das Briefing weiß, dass es zier zuende ist.
+--- ASP("Option1", "Erste Option", "Dies ist die erste Option.", false, "Marcus");
+--- AP();
+--- ASP("Option2", "Zweite Option", "Dies ist die zweite Option.", false, "Marcus");
+--- ```
+---
+--- #### Example:
+--- Das Sprungziel einer Option kann durch eine Funktion bestimmt werden. Die
+--- Funktion muss den Namen der Zielseite zurückgeben.
+--- ```lua
+--- AP {
+---    Title        = "Marcus",
+---    Text         = "Das ist keine so einfache Seite.",
+---    Position     = "Marcus",
+---    Rotation     = 30,
+---    DialogCamera = true,
+---    MC = {
+---        {"Option 1", "Option1"},
+---        {"Option 2", ForkingFunction},
+---    },
+--- };
+--- ```
+---
+--- @param _Data table Seitendaten
+--- @return table Page Erzeugte Seite
+function AP(_Data)
+    return {};
+end
+
+--- Erstellt eine Seite auf vereinfachte Weise.
+--- <p>
+--- <b>Achtung</b>: Diese Funktion ist veraltet und kann nur mit der
+--- deklarativen API benutzt werden.
+---
+--- Die Funktion kann einen automatischen Seitennamen basierend auf dem 
+--- Seitenindex erstellen. Ein Name kann ein optionales Parameter am 
+--- Anfang sein. Die Seite wird nicht weiter springen, bis der Skip-Button 
+--- geklicht wird.
+---
+--- #### Example:
+---
+--- ```lua
+--- -- Totale Ansicht
+--- ASP("Titel", "Einige wichtige Texte.", false, "HQ");
+--- -- Seitennamen
+--- ASP("Seite1", "Titel", "Einige wichtige Texte.", false, "HQ");
+--- -- Nahaufnahme
+--- ASP("Titel", "Einige wichtige Texte.", true, "Marcus");
+--- -- Aktion aufrufen
+--- ASP("Titel", "Einige wichtige Texte.", true, "Marcus", MyFunction);
+--- ```
+---
+--- @param _Name? string Name der Seite
+--- @param _Title string Angezeigter Seitentitel
+--- @param _Text string Angezeigter Seitentext
+--- @param _DialogCamera boolean Verwendung der Nahaufnahmekamera
+--- @param _Position? string Skriptname der fokussierten Entität
+--- @param _Action? function Aktion bei Anzeige
+--- @return table Page Erzeugte Seite
+function ASP(...)
+    return {};
+end
+
